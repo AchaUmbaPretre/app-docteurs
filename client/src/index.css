@@ -1,0 +1,15 @@
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+.btn-primary{
+  border: none;
+  background: navy;
+  color: #fff;
+  width: 100px;
+  padding: 8px 10px;
+  cursor: pointer;
+  margin-left: 8px;
+  border-radius: 5px;
+}

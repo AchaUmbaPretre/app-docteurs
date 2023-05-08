@@ -1,0 +1,11 @@
+.appDoctor{
+    background: #fff;
+    padding: 40px;
+    border-radius: 10px;
+}
+.appDoctor-h1{
+    text-align: center;
+    font-size: 1.6rem;
+    color: rgb(102, 99, 99);
+    margin-bottom: 40px;
+}
