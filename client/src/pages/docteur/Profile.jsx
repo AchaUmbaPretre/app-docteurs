@@ -1,24 +1,63 @@
-import { Col, Form, Input, Row, TimePicker, message } from 'antd'
+import { useEffect, useState } from 'react'
 import Layout from '../../composants/layout/Layout'
-import './appDoctor.css'
+import './profile.css'
+import { useNavigate, useParams } from 'react-router-dom';
+import axios from 'axios'
+import { message, Col, Form, Input, Row } from 'antd';
 
-const AppDoctor = () => {
+const Profile = () => {
 
-    const handLeFinish = (values) =>{
-        try {
+  const [docteur, setDocteur] = useState(null);
+  const  params = useParams();
+  const navigate = useNavigate();
+
+  const getProfile = async () =>{
+      try {
+        const res = await axios.post("/api/docteur/getDocteurInfo", { userId: params.id },
+            { Headers:{
+              Autorization: `Bearer ${localStorage.getItem('token')}`
+            }}
             
-        } catch (error) {
-            console.log(error)
-            message.error('Somthing Went Wrong')
+          )
+          if(res.data.success){
+            setDocteur(res.data.data)
+          }
+      } catch (error) {
+        console.log(error)
+      }
+  }
+
+  const handleFinish = async (values) =>{
+    try {
+      const res = await axios.post("/api/docteur/updateProfile", { ...values, /* userId: user._id */},
+        { Headers:{
+          Autorization: `Bearer ${localStorage.getItem('token')}`
+        }}
+      )
+        if(res.data.success){
+          message.success(res.data.message);
+          navigate('/')
         }
+        else{
+          message.error(res.data.message)
+        }
+      
+    } catch (error) {
+      console.log(error)
     }
+
+  }
+
+  useEffect(()=>{
+    getProfile()
+  }, []);
 
   return (
     <>
         <Layout>
-            <div className="appDoctor">
-                <h1 className="users-h1">APPLICATION DOCTEUR</h1>
-                <Form layout='vertical' onFinish={handLeFinish}>
+            <div className="profile">
+                <h1 className="users-h1">Manage Profile</h1>
+                <Form layout='vertical' onFinish={handleFinish} initialValues={docteur}>
                     <h3 className="appDoctor-h3">Personal Detail :</h3>
                     <Row gutter={20}>
                         <Col xs={24} md={24} lg={8}>
@@ -69,13 +108,11 @@ const AppDoctor = () => {
                                 <Input type='text' placeholder='votre contact..'/>
                             </Form.Item>
                         </Col>
-                        <Col xs={24} md={24} lg={8}>
-                            <Form.Item label={"Timings"} name={'timings'} required rules={[{required: true}]}>
-                                <TimePicker.RangePicker format={'HH : mm'}/>
-                            </Form.Item>
+                        <Col xs={24} md={24} lg={8}></Col>
+                        <Col xs={24} md={24} lg={8}  className="rows-profil">
+                          <button className="btn-primary btn-profil" type='submit'>Modifier</button>
                         </Col>
                     </Row>
-                    <button className="btn-primary" type='submit'>Envoyer</button>
                 </Form>
             </div>
         </Layout>
@@ -83,4 +120,4 @@ const AppDoctor = () => {
   )
 }
 
-export default AppDoctor
+export default Profile

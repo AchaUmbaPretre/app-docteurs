@@ -1,0 +1,10 @@
+.users{
+    background: #fff;
+    padding: 30px;
+    border-radius: 5px;
+}
+.users-h1{
+    text-align: center;
+    font-size: 1.5rem;
+    margin-bottom: 20px;
+}

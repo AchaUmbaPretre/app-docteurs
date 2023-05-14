@@ -1,4 +1,4 @@
-export const SidenavMenu = [
+export const userMenu = [
     {
         name: "Accueil",
         path: "/",
@@ -6,7 +6,7 @@ export const SidenavMenu = [
     },
     {
         name: "Rendez-vous",
-        path: "/appointment",
+        path: "/rendezVous",
         icons: "fas fa-list layout-icon"
     },
     {
@@ -16,12 +16,12 @@ export const SidenavMenu = [
     },
     {
         name: "Profile",
-        path: "/profile",
+        path: "/docteur/profile/:id",
         icons: "fas fa-user layout-icon"
     },
 ]
 
-export const AdminMenu = [
+export const adminMenu = [
     {
         name: "Accueil",
         path: "/",
@@ -29,12 +29,12 @@ export const AdminMenu = [
     },
     {
         name: "Docteur",
-        path: "/docteur",
+        path: "/admin/docteur",
         icons: "fas fa-user-doctor layout-icon"
     },
     {
-        name: "Utilisateur",
-        path: "/appDoctor",
+        name: "Utilisateurs",
+        path: "/admin/users",
         icons: "fas fa-user layout-icon"
     },
     {

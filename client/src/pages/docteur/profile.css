@@ -1,0 +1,24 @@
+.profile{
+    padding: 30px;
+    background: #fff;
+    border-radius: 5px;
+    width: 100%;
+}
+.profile-h1{
+    text-align: center;
+    font-size: 2rem;
+    color: gray;
+}
+.rows-profil{
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.btn-profil{
+    width: 400px;
+    transition: .3s;
+}
+.btn-profil:hover{
+    background: royalblue;
+}

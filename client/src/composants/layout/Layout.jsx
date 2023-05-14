@@ -2,8 +2,8 @@ import { Badge } from 'antd'
 import './layout.css'
 import { Link, useNavigate, useLocation } from 'react-router-dom'
 import { message } from 'antd'
-import { SidenavMenu } from '../../data/Data'
-import user from "./../../img/user.jpg"
+import { adminMenu, userMenu } from '../../data/Data'
+import users from "./../../img/user.jpg"
 
 const Layout = ({children}) => {
 
@@ -15,6 +15,26 @@ const Layout = ({children}) => {
         message.success('logout Successfully')
         navigate('/login')
     }
+
+const docteurMenu = [
+    {
+        name: "Accueil",
+        path: "/",
+        icons: "fas fa-house layout-icon"
+    },
+    {
+        name: "Rendez-vous",
+        path: "/rendezVous",
+        icons: "fas fa-list layout-icon"
+    },
+    {
+        name: "Profile",
+        path: `/docteur/profile/$/* {user?._id} */`,
+        icons: "fas fa-user layout-icon"
+    },
+]
+
+    /* const sideMenu = user?.isAdmin ? adminMenu : userMenu?.isDocteur ? docteurMenu : userMenu; */
   return (
     <>
         <div className="layout">
@@ -22,7 +42,7 @@ const Layout = ({children}) => {
                 <h2 className="layout-title">App Docteur</h2>
                 <hr className="layout-hr" />
                 <div className="layout-bottom">
-                { SidenavMenu.map((sidenav)=>{
+                { userMenu.map((sidenav)=>{
                     const isActive = location.pathname ===  sidenav.path
                 return (
                     <div className= {`layout-items ${isActive && 'active'}`}>
@@ -43,7 +63,7 @@ const Layout = ({children}) => {
                             <i className="fas fa-bell layout-icons"></i>
                         </Badge>
                         <div className="layout-rows">
-                            <img src={user} alt="" className="layout-img" />
+                            <img src={users} alt="" className="layout-img" />
                             <Link className="layout-admin">Admin</Link>
                         </div>
                     </div>

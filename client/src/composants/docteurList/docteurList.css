@@ -1,0 +1,12 @@
+.docteurList{
+    background: #fff;
+    border-radius: 5px;
+    cursor: pointer;
+}
+.docteur-header{
+    background: rgba(172, 170, 170, 0.425);
+    padding: 10px 15px;
+}
+.docteur-body{
+    padding: 15px;
+}
