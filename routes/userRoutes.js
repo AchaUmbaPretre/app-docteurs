@@ -19,7 +19,7 @@ router.post("/login", loginController);
 
 router.post("/register", registerController);
 
-router.post("/getUser", authMid, authController);
+router.post("/getUser",authMid, authController);
 
 router.post("/appDocteur", authMid, appDocteurController);
 

@@ -10,24 +10,33 @@ import Docteur from "./pages/admin/Docteur";
 import Profile from "./pages/docteur/Profile";
 import BookRDV from "./pages/bookRdv/BookRDV";
 import Rdv from "./pages/rendezVous/Rdv";
+import DocteurRdv from "./pages/docteur/docteurRdv/DocteurRdv";
+import { useSelector } from "react-redux";
+import Spinner from "./pages/spinner/Spinner";
+import { ProtectionRoute } from "./protectionRoutes/ProtectionRoutes";
+import { ProtectionPublic } from "./protectionRoutes/ProtectionPublic";
 
 
 function App() {
+  const {loading} = useSelector(state  => state.alerts)
   return (
     <>
       <BrowserRouter>
+      {loading ? <Spinner/> :
         <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/appDoctor" element={<AppDoctor />} />
-          <Route path="/notification" element={<Notification />} />
-          <Route path="/admin/users" element={<Users/>} />
-          <Route path="/admin/docteur" element={<Docteur/>} />
-          <Route path="/docteur/profile/:id" element={<Profile/>} />
-          <Route path="/docteur/book-rdv/:docteurId" element={<BookRDV/>} />
-          <Route path="/rendezVous" element={<Rdv/>} />
-          <Route path="/login" element={<Login/>} />
-          <Route path="/register" element={<Register/>} />
+          <Route path="/" element={ <ProtectionRoute><Home /></ProtectionRoute> } />
+          <Route path="/appDoctor" element={<ProtectionRoute><AppDoctor /></ProtectionRoute>} />
+          <Route path="/notification" element={<ProtectionRoute><Notification /></ProtectionRoute>} />
+          <Route path="/admin/users" element={<ProtectionRoute><Users/></ProtectionRoute>} />
+          <Route path="/admin/docteur" element={<ProtectionRoute><Docteur/></ProtectionRoute>} />
+          <Route path="/docteur/profile/:id" element={<ProtectionRoute><Profile/></ProtectionRoute>} />
+          <Route path="/docteur/book-rdv/:docteurId" element={<ProtectionRoute><BookRDV/></ProtectionRoute>} />
+          <Route path="/rendezVous" element={<ProtectionRoute><Rdv/></ProtectionRoute>} />
+          <Route path="/docteur-rendezVous" element={<ProtectionRoute><DocteurRdv/></ProtectionRoute>} />
+          <Route path="/login" element={<ProtectionPublic><Login/></ProtectionPublic>} />
+          <Route path="/register" element={<ProtectionPublic><Register/></ProtectionPublic>} />
         </Routes>
+         }
       </BrowserRouter>
     </>
   );

@@ -3,21 +3,28 @@ import Layout from '../../composants/layout/Layout'
 import './profile.css'
 import { useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios'
-import { message, Col, Form, Input, Row } from 'antd';
-
+import { message, Col, Form, Input, Row, TimePicker } from 'antd';
+import { useSelector } from 'react-redux';
+import { hideLoading, showLoading } from '../../redux/featured/alertSlide';
+import { useDispatch } from 'react-redux';
+import moment from 'moment';
 const Profile = () => {
 
   const [docteur, setDocteur] = useState(null);
-  const  params = useParams();
+  const params = useParams();
   const navigate = useNavigate();
-
-  const getProfile = async () =>{
+  const {user} = useSelector(state => state.user)
+  const dispatch = useDispatch()
+ 
+  useEffect(()=>{
+    const getProfile = async () =>{
       try {
-        const res = await axios.post("/api/docteur/getDocteurInfo", { userId: params.id },
-            { Headers:{
-              Autorization: `Bearer ${localStorage.getItem('token')}`
-            }}
-            
+        const res = await axios.post("http://localhost:8800/api/docteur/getDocteurInfo", { userId: params.id },
+          {
+            headers:{
+              Authorization : "Bearer " + localStorage.getItem('token'),
+            }
+          }
           )
           if(res.data.success){
             setDocteur(res.data.data)
@@ -26,14 +33,23 @@ const Profile = () => {
         console.log(error)
       }
   }
-
+    getProfile()
+  }, []);
+  
   const handleFinish = async (values) =>{
     try {
-      const res = await axios.post("/api/docteur/updateProfile", { ...values, /* userId: user._id */},
-        { Headers:{
-          Autorization: `Bearer ${localStorage.getItem('token')}`
-        }}
+      dispatch(showLoading())
+      const res = await axios.post("http://localhost:8800/api/docteur/updateProfile", { ...values, userId: user._id, timings:[
+        moment(values.timings[0], 'HH:mm'),
+        moment(values.timings[1], 'HH:mm')
+      ]},
+      {
+        headers:{
+          Authorization : "Bearer " + localStorage.getItem('token'),
+        }
+      }
       )
+      dispatch(hideLoading())
         if(res.data.success){
           message.success(res.data.message);
           navigate('/')
@@ -43,35 +59,37 @@ const Profile = () => {
         }
       
     } catch (error) {
+      dispatch(hideLoading())
       console.log(error)
     }
 
   }
 
-  useEffect(()=>{
-    getProfile()
-  }, []);
 
   return (
     <>
         <Layout>
             <div className="profile">
-                <h1 className="users-h1">Manage Profile</h1>
-                <Form layout='vertical' onFinish={handleFinish} initialValues={docteur}>
-                    <h3 className="appDoctor-h3">Personal Detail :</h3>
+                <h1 className="users-h1">Profil du gestionnaire</h1>
+              {docteur &&(
+                <Form layout='vertical' onFinish={handleFinish} initialValues={{...docteur,timings: [
+                  moment(docteur.timings[0], 'HH:mm'),
+                  moment(docteur.timings[1], 'HH:mm')
+                ]}}>
+                    <h3 className="appDoctor-h3">Detail personnel:</h3>
                     <Row gutter={20}>
                         <Col xs={24} md={24} lg={8}>
-                            <Form.Item label={"First name"} name={'firstname'} required rules={[{required: true}]}>
+                            <Form.Item label={"Prenom"} name={'firstname'} required rules={[{required: true}]}>
                                 <Input type='text' placeholder='votre nom...'/>
                             </Form.Item>
                         </Col>
                         <Col xs={24} md={24} lg={8}>
-                            <Form.Item label={"Last name"} name={'lastname'} required rules={[{required: true}]}>
+                            <Form.Item label={"Nom"} name={'lastname'} required rules={[{required: true}]}>
                                 <Input type='text' placeholder='votre nom...'/>
                             </Form.Item>
                         </Col>
                         <Col xs={24} md={24} lg={8}>
-                            <Form.Item label={"Phone"} name={'phone'} required rules={[{required: true}]}>
+                            <Form.Item label={"Numero"} name={'phone'} required rules={[{required: true}]}>
                                 <Input type='text' placeholder='+243...'/>
                             </Form.Item>
                         </Col>
@@ -91,7 +109,7 @@ const Profile = () => {
                             </Form.Item>
                         </Col>
                     </Row>
-                    <h3 className="appDoctor-h3">Professional Details :</h3>
+                    <h3 className="appDoctor-h3">Details professionnels :</h3>
                     <Row gutter={20}>
                         <Col xs={24} md={24} lg={8}>
                             <Form.Item label={"Specialisation"} name={'specialisation'} required rules={[{required: true}]}>
@@ -104,16 +122,22 @@ const Profile = () => {
                             </Form.Item>
                         </Col>
                         <Col xs={24} md={24} lg={8}>
-                            <Form.Item label={"FeesPerCunsaltation"} name={'feesPerCunsaltation'} required rules={[{required: true}]}>
-                                <Input type='text' placeholder='votre contact..'/>
+                            <Form.Item label={"Remuneration des frais"} name={'feesPerCunsaltation'} required rules={[{required: true}]}>
+                                <Input type='text' placeholder='frais..'/>
+                            </Form.Item>
+                        </Col>
+                        <Col xs={24} md={24} lg={8}>
+                            <Form.Item label={"Horaires"} name={'timings'} required rules={[{required: true}]}>
+                                <TimePicker.RangePicker format={'HH:mm'}/>
                             </Form.Item>
                         </Col>
                         <Col xs={24} md={24} lg={8}></Col>
-                        <Col xs={24} md={24} lg={8}  className="rows-profil">
+                        <Col xs={24} md={24} lg={8} className="rows-profil">
                           <button className="btn-primary btn-profil" type='submit'>Modifier</button>
                         </Col>
                     </Row>
                 </Form>
+                ) }
             </div>
         </Layout>
     </>

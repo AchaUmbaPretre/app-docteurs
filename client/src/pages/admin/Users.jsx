@@ -10,7 +10,7 @@ const Users = () => {
 
   const getUsers  = async () =>{
     try {
-      const res =  await axios.get('/api/admin/getAllUsers', {
+      const res =  await axios.get('http://localhost:8800/api/admin/getAllUsers', {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('token')}`
         },
@@ -32,7 +32,7 @@ useEffect(()=>{
   const  columns = [
     {
       title: 'Nom',
-      dataIndex: 'nom'
+      dataIndex: 'name'
     },
     {
       title: 'Email',
@@ -50,8 +50,7 @@ useEffect(()=>{
       dataIndex: 'actions',
       render: (text, record)=>(
         <div className="actions">
-          <button className="action-btn"></button>
-          <button className="action-btn"></button>
+          <button className="action-btn red">block</button>
         </div>
       )
     },
@@ -61,7 +60,7 @@ useEffect(()=>{
         <Layout>
             <div className="users">
                <h1 className="users-h1">Liste des utilisateurs</h1>
-               <Table columns={columns} dataSource={''} />
+               <Table columns={columns} dataSource={users} />
             </div>
         </Layout>
     </>

@@ -17,23 +17,27 @@ const rdvSchema  = new mongoose.Schema({
         type: String,
         required: true
     },
-    data: {
+    lastname: {
+        type: String,
+        required: true
+    },
+    numero: {
+        type: String,
+        required: true
+    },
+    date: {
         type: String,
         required: true
     },
     status: {
         type: String,
         required: true,
-        default: "pending"
+        default: "en attente"
     },
     time: {
         type: String,
         required: true
-    },
-    userId: {
-        type: String,
-        required: true
-    },
+    }
 },{timestamps: true})
 
 const rdvModel = mongoose.model('rdv', rdvSchema);

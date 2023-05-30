@@ -1,4 +1,6 @@
 import doctorModel from "../models/doctorModel.js"
+import rdvModel from "../models/rdvModel.js"
+import userModel from "../models/userModels.js"
 
 export const getDocteurInfoCtrl = async (req, res) =>{
     try {
@@ -46,6 +48,53 @@ export const getDocteurByIdController = async (req, res) =>{
             message: 'sigle docteur info fetched',
             success: true
     })
+    } catch (error) {
+        console.log(error)
+        res.status(500).send({
+            success: false,
+            message: 'Error in Single docteur  info',
+            error
+        })
+    }
+}
+
+export const docteurRdvController = async (req, res) =>{
+    try {
+        const docteur = await doctorModel.findOne({userId: req.body.userId});
+        const rdv = await rdvModel.find({docteurId: docteur._id});
+        res.status(200).send({
+            data: rdv,
+            message: 'sigle docteur info fetched',
+            success: true
+    })
+    } catch (error) {
+        console.log(error)
+        res.status(500).send({
+            success: false,
+            message: 'Error in Single docteur  info',
+            error
+        })
+    }
+}
+
+export const updateStatusController = async (req, res) => {
+    try {
+        const {rdvId, status} = req.body;
+        const rendezVous = await rdvModel.findByIdAndUpdate(rdvId, {status});
+        const user = await userModel.findOne({_id: rendezVous.userId});
+        const notification = user.notification
+        notification.push({
+        type: 'status-updated',
+        message: `Your rendez-vous has been updated ${status}`,
+        onclickPath: '/docteur-rendezVous'
+        })
+        await user.save()
+        res.status(200).send({
+        success: true,
+        message: "rendez-vous status modifié",
+        data: user
+        })
+        
     } catch (error) {
         console.log(error)
         res.status(500).send({

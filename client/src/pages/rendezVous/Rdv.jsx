@@ -2,18 +2,18 @@ import { useEffect, useState } from 'react'
 import Layout from '../../composants/layout/Layout'
 import './rdv.css'
 import axios from 'axios';
-import { useParams } from 'react-router-dom';
 import { Table } from 'antd';
+import moment from 'moment'
 
 const Rdv = () => {
     const [rdv, setRdv] = useState();
 
-    const getRdv = async(req, res) => {
+    const getRdv = async() => {
         try {
-            const res = await axios.get('/api/user/user-rdv',
+            const res = await axios.get('http://localhost:8800/api/user/user-rdv',
             {
                 headers:{
-                  Authorization : "Bearer" + localStorage.getItem('token'),
+                  Authorization : "Bearer " + localStorage.getItem('token'),
                 }
               }
             )
@@ -25,6 +25,7 @@ const Rdv = () => {
             console.log(error)
         }
     }
+    console.log(rdv)
 
 useEffect(() => {
     getRdv();
@@ -41,7 +42,7 @@ useEffect(() => {
             dataIndex:'name',
             render: (text, record) => (
                 <span>
-                    {record.docteurId.firstName} {record.docteurId.lastName}
+                    {record.lastname}
                 </span>
             )
         },
@@ -50,7 +51,7 @@ useEffect(() => {
             dataIndex:'phone',
             render: (text, record) => (
                 <span>
-                    {record.docteurId.phone}
+                    {record.numero}
                 </span>
             )
         },
@@ -59,7 +60,7 @@ useEffect(() => {
             dataIndex:'date',
             render: (text, record) => (
                 <span>
-                    {/* {moment(record.date).format("DD-MM-YYYY")} */}
+                    {moment(record.date).format("DD-MM-YYYY")}
                 </span>
             )
         },
@@ -68,7 +69,7 @@ useEffect(() => {
             dataIndex:'time',
             render: (text, record) => (
                 <span>
-                    {/* { moment(record.time).format("HH:mm")} */}
+                     { moment(record.time).format("HH:mm")}
                 </span>
             )
         },
@@ -83,7 +84,7 @@ useEffect(() => {
         <Layout>
             <div className="rdv">
                 <h1 className='users-h1'>Liste des rendez-vous</h1>
-                <Table columns={columns}/>
+                <Table columns={columns}  dataSource={rdv}/>
             </div>
         </Layout>
     </>

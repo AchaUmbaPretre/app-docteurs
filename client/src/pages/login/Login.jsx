@@ -1,16 +1,20 @@
 import React from "react";
 import "./login.css";
+import { useDispatch } from "react-redux";
+import { showLoading, hideLoading } from "../../redux/featured/alertSlide";
 import { Form, Input, message } from "antd";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 
 const Login = () => {
+  const dispatch = useDispatch()
   const navigate = useNavigate();
   //form handler
   const onfinishHandler = async (values) => {
     try {
-      const res = await axios.post("/api/user/login", values);
-      window.location.reload()
+      dispatch(showLoading())
+      const res = await axios.post("http://localhost:8800/api/user/login", values);
+      dispatch(hideLoading())
       if (res.data.success) {
         localStorage.setItem("token", res.data.token);
         message.success("Login Successfully");
@@ -19,6 +23,7 @@ const Login = () => {
         message.error(res.data.message);
       }
     } catch (error) {
+      dispatch(hideLoading())
       console.log(error);
       message.error("something went wrong");
     }
@@ -30,7 +35,7 @@ const Login = () => {
         onFinish={onfinishHandler}
         className="register-form"
       >
-        <h3 className="text-center">Login</h3>
+        <h3 className="text-center">Connexion</h3>
 
         <Form.Item label="Email" name="email">
           <Input type="email" required />
@@ -39,7 +44,7 @@ const Login = () => {
           <Input type="password" required />
         </Form.Item>
         <Link to="/register" className="m-2">
-          Not a user Register here
+          inscrivez-vous ici
         </Link>
         <button className="btn-primary" type="submit">
           Login

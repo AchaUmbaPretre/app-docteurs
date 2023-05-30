@@ -1,9 +1,9 @@
-import Jwt from 'bcryptjs'
+import Jwt from 'jsonwebtoken'
 
 export const authMid = async (req, res, next) =>{
 
     try{
-        const token = await req.headers('authorization').split(' ')[1];
+        const token = req.headers['authorization'].split(' ')[1]
         Jwt.verify(token, process.env.JWT, (error, decode) =>{
         if(error){
             return res.status(200).send({

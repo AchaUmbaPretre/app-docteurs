@@ -1,30 +1,30 @@
 import './docteurList.css'
-import {useNavigate} from 'react-router-dom'
+import {Link, useNavigate} from 'react-router-dom'
 
 const DocteurList = ({docteur}) => {
   const navigate = useNavigate();
 
   return (
     <>
-        <div className="docteurList" onClick={navigate(`/docteur/book-rdv/${1}`)}>
+        <Link className="docteurList" to={`/docteur/book-rdv/${docteur._id}`}>
             <div className="docteur-header">
-              Dr. <span className="docteur-span">Ndambi umba</span>
+              Dr. <span className="docteur-span">{docteur.firstname} {docteur.lastname}</span>
             </div>
             <div className="docteur-body">
               <p className="docteur-desc">
-                <b>Specialisation :</b> dental
+                <b>Specialisation :</b> {docteur.specialisation}
               </p>
               <p className="docteur-desc">
-                <b>Experience :</b> 5
+                <b>Experience :</b> {docteur.experience}
               </p>
               <p className="docteur-desc">
-                <b>Fees Per Cunsaltation :</b> 500
+                <b>Frais par indemnisation :</b> {docteur.feesPerCunsaltation}
               </p>
               <p className="docteur-desc">
-                <b>Timings :</b> 07:00 -  12:00
+                <b>Horaires :</b> {docteur.timings[0]} - {docteur.timings[1]}
               </p>
             </div>
-        </div>
+        </Link>
     </>
   )
 }
